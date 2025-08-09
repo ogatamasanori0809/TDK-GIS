@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>TDK URL選択メニュー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h2 class="mb-4 text-center">TDK URL選択メニュー</h2>
+
+    <label for="main" class="form-label">大項目</label>
+    <select id="main" class="form-select mb-3" onchange="onMainChange()"></select>
+
+    <label for="middle" class="form-label">中項目</label>
+    <select id="middle" class="form-select mb-3" onchange="onMiddleChange()"></select>
+
+    <label for="sub" class="form-label">小項目</label>
+    <select id="sub" class="form-select mb-4"></select>
+
+    <button onclick="openLink()" class="btn btn-primary w-100">URLを開く</button>
+  </div>
+
+  <script>
+    const menuData = {
+  "佐世保クリテウム": {
+    "コース": {
+      "通常": "https://tdk2025.k-robot.jp/sasebo_2025_gis/marshal/697e0f5efdf293dde9c9f1160ea052608b79ee3ca34efa71ed",
+      "標高付": "https://tdk2025.k-robot.jp/sasebo_2025_gis/marshal/697e0f5efdf293dde9c9f1160ea052608b79ee3ca34efa71ed/advanced",
+      "course": "https://tdk2025.k-robot.jp/sasebo_2025_gis/course/b08d4ad9c4e445fb243fc9a5cb6ee7c9ac39e7aee0fb218f83"
+    },
+    "大会": {
+      "restrictions": "https://tdk2025.k-robot.jp/sasebo_2025_gis/restrictions/2a2329422f642772987e8223f39f24f49e242a7239696743b3",
+      "spectator": "https://tdk2025.k-robot.jp/sasebo_2025_gis/spectator/ff7b18cfcc1cfac65917cbe3bbbf2eb7c2b8a8a5f0b366a19c",
+      "race": "https://tdk2025.k-robot.jp/sasebo_2025_gis/race/bd96ef9b3458781e2974cbf0b7239d36f581ee6aaea4fbfb13"
+    },
+    "警備員等検索": {
+      "警備員": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_1_for_staff/a78d37c04d272e71b7dd3fa49a96e2377a32641538cbdf2016",
+      "審判員": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_2_for_staff/0075c2d785cc4de91761fdf971115a006a89a492d7f26e2428",
+      "看板": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_10_for_staff/355a66772eed4dfcfb400cd9949f4f3b750b512489266f19a2",
+      "資材": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_8_for_staff/2569c932b2cfef65d1d0d61c0ebc7b1da56fc3a07315089933",
+      "資材＋看板": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_8_10_for_staff/f43be795ac293a7d047f7b996c5098d42cccfad97dcc03995c",
+      "自主整理員+資材": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_3_8_for_staff/73dc30f5208721e6b246e1480aebf1abc24b44a8f00ddf4c88",
+      "警備員＋自主整理員＋資材": "https://tdk2025.k-robot.jp/sasebo_2025_gis/project_1_3_8_for_staff/89f156e557b98ce956553553d744ea214448d53f22d64b4e28",
+      "①③⑧⑩統合": "https://tdk2025.k-robot.jp/sasebo_2025_gis/icon_search__for_staff/ef05a9766fc35586e6b4ad1e3f3f62a194ff146f42d7b88073"
+    }
+  },
+  "福岡ステージ": {
+    "コース": {
+      "通常": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/marshal/6534718ac0a9c5cff95105243463474eda7cea10eacb60e48e",
+      "標高付": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/marshal/6534718ac0a9c5cff95105243463474eda7cea10eacb60e48e/advanced",
+      "course": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/course/0c5a7498d927b508555fa72990b103090a755c1673366c7490"
+    },
+    "大会": {
+      "restrictions": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/restrictions/45ffe0b18dacc53115dafd217bf8ce64f0ba89648fd496fa23",
+      "spectator": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/spectator/2368bfbf211019a708bff76b7c088370030f1946fb5e7d6e15",
+      "race": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/race/890d0ffe9402d67ea1958d678f32aad7a486c1ea821b625be7"
+    },
+    "警備員等検索": {
+      "警備員": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_1_for_staff/48bda0f22daf5066367aecdeea1f146d520557445d943c2217",
+      "審判員": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_2_for_staff/33ea63ec13c3324b0f4a8a4cfe7c8371e34e5bf59a0f133df7",
+      "看板": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_10_for_staff/98bf4e62fcf699df5e5c67c182be15f5d695585c10cb64f795",
+      "資材": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_8_for_staff/a797b618fd0bc608cb25052bafbbd2164fecc175c054f551dc",
+      "資材＋看板": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_8_10_for_staff/598d104b9ab985c3168d565f953dece543275fdc543dfe53a6",
+      "自主整理員+資材": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_3_8_for_staff/e2a640f146e38788b4a7ea83546f3c5130fdd5620452bc0e7f",
+      "警備員＋自主整理員＋資材": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/project_1_3_8_for_staff/cd2e8dbc2cf043863da40557737f9b9604c745757c911c2467",
+      "①③⑧⑩統合": "https://tdk2025.k-robot.jp/fukuoka_2025_gis/icon_search__for_staff/93ff6c2bdc3f07e62a11f9448aeed0adeed1ae5b19896885b1"
+    }
+  },
+  "熊本阿蘇ステージ": {
+    "コース": {
+      "通常": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/marshal/7338d2046e7f11c4d8d517ebe78570c9bee3a24995bad80e9a",
+      "標高付": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/marshal/7338d2046e7f11c4d8d517ebe78570c9bee3a24995bad80e9a/advanced",
+      "course": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/course/3bb9ec77333036f0099da88fcb26a90ee7fc36c14c5edf7808"
+    },
+    "大会": {
+      "restrictions": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/restrictions/3d3901a8daffa7ce9e5e3dfc7f51595270fa0683666c1f4d28",
+      "spectator": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/spectator/ddfc316069987cf68591e7c6bf3514f38c8adab520cd57ee77",
+      "race": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/race/fb20f339602ee82bfb0d1a03c9fee1707ddaae830bed7ea9d3"
+    },
+    "警備員等検索": {
+      "警備員": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_1_for_staff/1f5b69a9042fa25bd5c8bcbc46cf910a0ed56dcb3ba02739fa",
+      "審判員": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_2_for_staff/2da3cb049aa96498966cb86ed0674a8d3a6a34fafac8d35a64",
+      "看板": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_10_for_staff/b0a588af49f18af08a63080e4676ba56d8fea4bf33c518eb35",
+      "資材": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_8_for_staff/ffe52d1720f63fca8db83a9a25ed2cf13da012dbdd12b7b944",
+      "資材＋看板": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_8_10_for_staff/f6ec853378bc19757b99ed877a691d823f5de40d2483cb8e2f",
+      "自主整理員+資材": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_3_8_for_staff/3d17fb5462e6ec0b5a6cb1ee396048bdae7d44bc3a5ef3c9ff",
+      "警備員＋自主整理員＋資材": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/project_1_3_8_for_staff/e6fb3c06222f5bd28a3ac105bfbce524c11e455604a7fd5244",
+      "①③⑧⑩統合": "https://tdk2025.k-robot.jp/kumamotoaso_2025_gis/icon_search__for_staff/a0b9c9d92fb6b8c81c69f918411ab9184c862976d47fb14ea1"
+    }
+  },
+  "延岡佐伯ステージ": {
+    "コース": {
+      "通常": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/marshal/313490442d1810e643186a8ff60c311dd5d0819cdcd0bc3c19",
+      "標高付": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/marshal/313490442d1810e643186a8ff60c311dd5d0819cdcd0bc3c19/advanced",
+      "course": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/course/fbdeaecea0f00f956c7feca679c6d57cbe3b3261d1749e9e38"
+    },
+    "大会": {
+      "restrictions": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/restrictions/97f99d22d6f29828f22f3c605e7dd085f79f4dd505b00be7be",
+      "spectator": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/spectator/af85ec0a0446a1773b573553532fc4ef2addf435b458f9a3b4",
+      "race": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/race/90ecd26f1856acaf97bcc2211e08888d342c45cc790d6b7a07"
+    },
+    "警備員等検索": {
+      "警備員": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_1_for_staff/b5b3202ffde66c080f754019a1491f43f5befdeced51c41a88",
+      "審判員(大分）": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_2_for_staff/8b0dd08d01ec9f6570891e544b018f0e757148d7f76f7a71e1",
+      "審判員(宮崎）": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_2(miyazaki)_for_staff/f11434eaa65f1b7dcd9c8ebedc7ee79415aab8e6c10f71abbe",
+      "看板": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_10_for_staff/d6c84c13b46c0942878c0a9e47b16e1d30d70d222b51a65db5",
+      "資材": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_8_for_staff/ce8ec477eccdfac3a9b7ad8b0f3c8b8ec639496b5d4447b5a6",
+      "資材＋看板": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_8_10_for_staff/ef3e9497534bd21ea74039898c85180351a0755fa9b45faf10",
+      "自主整理員+資材": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_3_8_for_staff/01aa4d1e64900079a711c4795d2dab4f6652afbd59262cf2b5",
+      "警備員＋自主整理員＋資材": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_1_3_8_for_staff/0e48da807d050ac09cec349a4513592a2843e6e41a472a0671",
+      "①③⑧⑩統合": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/icon_search__for_staff/f8882992171ae452df72ddee5b57c2b5151691c4eab5bc8997"
+    },
+    "トイレ配置": {
+      "スタート付近": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_18/6165fd5a4a92b65bdbc902a8cfb6ed29d5d7604e438799c49b/32.92229220382225/131.91252102433558/13",
+      "中間付近": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_18/6165fd5a4a92b65bdbc902a8cfb6ed29d5d7604e438799c49b/32.757478220771944/131.83363544146854/12",
+      "フィニッシュ付近": "https://tdk2025.k-robot.jp/nobeokasaiki_2025_gis/project_18/6165fd5a4a92b65bdbc902a8cfb6ed29d5d7604e438799c49b/32.64038574420374/131.72349363954655/12"
+    }
+  },
+  "ドキュメント": {
+    "２０２４資料": {
+      "レースマニュアル": "https://notebooklm.google.com/notebook/583f5b8d-0fd8-4f70-a5c3-abc62f473f0a?_gl=1*qg604w*_up*MQ..*_ga*NjQ0MTYxNTE3LjE3NTIwMjIxMjE.*_ga_W0LDH41ZCB*czE3NTIwMjIxMjEkbzEkZzAkdDE3NTIwMjIxMjEkajYwJGwwJGgw&gclid=CjwKCAjwg7PDBhBxEiwAf1CVuxWhwGQckuL6pQHiAT4yUwCjJerXK6_5W9t4kaFt8T0tkMeW_5BmvRoC2EcQAvD_BwE&gbraid=0AAAAA-fwSsfQywbxomzwZd5MdHSChXSWm",
+      "宿泊関係": "https://notebooklm.google.com/notebook/a9a28690-1076-4aca-8676-23ca4ed5a51a?_gl=1*4s2fmr*_up*MQ..*_ga*MTg2MDY2MzAxOC4xNzUyMDI5MzQy*_ga_W0LDH41ZCB*czE3NTIwMjkzNDEkbzEkZzAkdDE3NTIwMjkzNDEkajYwJGwwJGgw&gclid=CjwKCAjwg7PDBhBxEiwAf1CVuxWhwGQckuL6pQHiAT4yUwCjJerXK6_5W9t4kaFt8T0tkMeW_5BmvRoC2EcQAvD_BwE&gbraid=0AAAAA-fwSsfQywbxomzwZd5MdHSChXSWm"
+    },
+    "２０２４／２５比較": {
+      "レースマニュアル": "https://notebooklm.google.com/notebook/9c8b58e0-147f-4b25-b942-c822865008c2?_gl=1*m50806*_up*MQ..*_ga*MTQzNTE2MTA4Ni4xNzUxNDAzNjQ0*_ga_W0LDH41ZCB*czE3NTIwODc2NjEkbzMkZzAkdDE3NTIwODc2NjEkajYwJGwwJGgw&gclid=CjwKCAjwg7PDBhBxEiwAf1CVuxWhwGQckuL6pQHiAT4yUwCjJerXK6_5W9t4kaFt8T0tkMeW_5BmvRoC2EcQAvD_BwE&gbraid=0AAAAA-fwSsfQywbxomzwZd5MdHSChXSWm",
+      "課題管理": "https://notebooklm.google.com/notebook/2e63c3cb-ce05-45c6-9936-042c4a046b55"
+    }
+  }
+};
+
+    function populate(selectId, options) {
+      const select = document.getElementById(selectId);
+      select.innerHTML = '<option value="">--選択--</option>';
+      for (let key in options) {
+        let opt = document.createElement("option");
+        opt.value = key;
+        opt.text = key;
+        select.appendChild(opt);
+      }
+    }
+
+    function onMainChange() {
+      const main = document.getElementById("main").value;
+      if (main) {
+        populate("middle", menuData[main]);
+        document.getElementById("sub").innerHTML = "";
+      }
+    }
+
+    function onMiddleChange() {
+      const main = document.getElementById("main").value;
+      const middle = document.getElementById("middle").value;
+      if (main && middle) {
+        populate("sub", menuData[main][middle]);
+      }
+    }
+
+    function openLink() {
+      const main = document.getElementById("main").value;
+      const middle = document.getElementById("middle").value;
+      const sub = document.getElementById("sub").value;
+      if (main && middle && sub) {
+        const url = menuData[main][middle][sub];
+        window.open(url, '_blank');
+      } else {
+        alert("すべての項目を選んでください。");
+      }
+    }
+
+    window.onload = () => populate("main", menuData);
+  </script>
+</body>
+</html>
